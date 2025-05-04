@@ -1,6 +1,7 @@
-import React, { useContext, useState, useEffect, use } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { UserContext } from '../context/user.context'
 import axios from '../config/axios.js'
+import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
 
@@ -8,6 +9,8 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [projectName, setProjectName] = useState('')
   const [project, setProject] = useState([])
+
+  const navigate = useNavigate()
 
   function createProject(e) {
     e.preventDefault()
@@ -42,15 +45,28 @@ const Home = () => {
           <i className="ri-link ml-2"></i>
         </button>
 
-        {project.map((project) => (
-          <div
-            key={project._id}
-            className="project p-6 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex justify-between items-center cursor-pointer bg-white mt-4"
-          >
-            <h2 className="text-xl font-semibold text-gray-800">{project.name}</h2>
-            <i className="ri-arrow-right-line text-gray-400 text-2xl"></i>
-          </div>
-        ))}
+        {
+          project.map((project) => (
+            <div
+              key={project._id}
+              onClick={() => {
+                navigate(`/project`, { state: { project } })
+              }}
+              className="project flex flex-col gap-3 cursor-pointer p-5 border border-gray-200 rounded-xl shadow-sm min-w-60 bg-white hover:shadow-md hover:bg-slate-300 transition-all duration-200"
+            >
+              <h2 className="text-lg font-semibold text-gray-800 truncate">
+                {project.name}
+              </h2>
+
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <i className="ri-user-line text-blue-500"></i>
+                <span className="font-medium">Collaborators:</span>
+                <span className="font-semibold text-gray-800">{project.users.length}</span>
+              </div>
+            </div>
+          ))
+        }
+
 
 
 
